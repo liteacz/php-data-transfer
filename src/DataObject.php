@@ -6,7 +6,6 @@ use \ReflectionClass;
 use \ReflectionProperty;
 use \ReflectionException;
 //
-use Litea\DataTransfer\Exceptions\UnknownPropertyTypeException;
 use Litea\DataTransfer\Exceptions\MissingExpectedPropertyException;
 
 /**
