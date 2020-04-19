@@ -174,7 +174,7 @@ class DataObjectTest extends TestCase
         $dto = (new class extends DataObject {
             protected static $allowImplicit = false;
 
-            /** @dto-property myString */
+            /** @dto-property */
             public $myString;
 
             public $ignoredString = 'Lorem ipsum';
@@ -182,5 +182,70 @@ class DataObjectTest extends TestCase
 
         $this->assertEquals($data['myString'], $dto->myString);
         $this->assertEquals('Lorem ipsum', $dto->ignoredString);
+    }
+
+    /**
+     * @test
+     */
+    public function it_casts_value_to_another_dto()
+    {
+        $data = [
+            'nestedDto' => ['foo' => 'bar', 'baz' => 42]
+        ];
+
+        $dto = (new class extends DataObject {
+            /** @var \Tests\DemoClass */
+            public $nestedDto;
+        })::create($data);
+
+        $this->assertInstanceOf(DemoClass::class, $dto->nestedDto);
+    }
+
+    /**
+     * @test
+     */
+    public function it_handles_array_of_strings()
+    {
+        $data = [
+            'myStrings' => ['Foo', 'Bar', 'Baz'],
+            'someOtherStrings' => ['Lorem', 'Ipsum', 'Dolor']
+        ];
+
+        $dto = (new class extends DataObject {
+            /** @var array */
+            public $myStrings;
+
+            /**
+             * @var array
+             * @dto-property someOtherStrings
+             */
+            public $otherStrings;
+        })::create($data);
+
+        $this->assertEqualsCanonicalizing($data['myStrings'], $dto->myStrings);
+        $this->assertEqualsCanonicalizing($data['someOtherStrings'], $dto->otherStrings);
+    }
+
+    /**
+     * @test
+     */
+    public function it_handles_array_of_dtos()
+    {
+        $data = [
+            'arrayOfDtos' => [
+                ['foo' => 'Bar'],
+                ['foo' => 'Baz'],
+                ['foo' => 'Lorem']
+            ]
+        ];
+
+        $dto = (new class extends DataObject {
+            /** @var \Tests\DemoClass[] */
+            public $arrayOfDtos;
+        })::create($data);
+
+        $this->assertInstanceOf(DemoClass::class, $dto->arrayOfDtos[0]);
+        $this->assertInstanceOf(DemoClass::class, $dto->arrayOfDtos[1]);
+        $this->assertInstanceOf(DemoClass::class, $dto->arrayOfDtos[2]);
     }
 }

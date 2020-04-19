@@ -128,7 +128,7 @@ abstract class DataObject
             $docBlock = (string)$property->getDocComment();
 
             if (preg_match($pattern, $docBlock, $matches)) {
-                $key = isset($matches[1])
+                $key = trim($matches[1]) !== ''
                     ? $matches[1]
                     : $property->getName();
             } elseif (static::$allowImplicit) {

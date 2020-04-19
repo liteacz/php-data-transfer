@@ -99,6 +99,10 @@ class DataPropertyType
             return $value;
         }
 
+        if (class_exists($type) && is_subclass_of($type, DataObject::class)) {
+            return call_user_func($type . '::create', [$value]);
+        }
+
         throw new Exception('No suitable type conversion found');
     }
 
