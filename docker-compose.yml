@@ -1,0 +1,9 @@
+version: "3"
+services:
+  php-cli:
+    build:
+      context: .
+    command: ["loop"]
+    working_dir: /var/www/data
+    volumes:
+      - ./:/var/www/data
