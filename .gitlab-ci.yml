@@ -1,0 +1,67 @@
+stages:
+  - install
+  - tests
+  - quality
+
+composer:
+  stage: install
+  image: liteacz/php:7.4-cli-build
+  script:
+    - composer --version
+    - composer install -a --no-suggest --no-scripts --prefer-dist
+  artifacts:
+    expire_in: 25 mins
+    paths:
+      - vendor
+  only:
+    - tags
+    - web
+    - merge_requests
+
+phpunit:
+  stage: tests
+  image: liteacz/php:7.4-cli-build
+  script:
+    - composer test
+  only:
+    - tags
+    - web
+    - merge_requests
+  dependencies:
+    - composer
+
+phpstan:
+  stage: quality
+  image: liteacz/php:7.4-cli-build
+  script:
+    - composer run-script phpstan
+  dependencies:
+    - composer
+  only:
+    - tags
+    - web
+    - merge_requests
+
+codesniffer:
+  stage: quality
+  image: liteacz/php:7.4-cli-build
+  script:
+    - composer run-script phpcs
+  dependencies:
+    - composer
+  only:
+    - tags
+    - web
+    - merge_requests
+
+security-check:
+  stage: quality
+  image: liteacz/php:7.4-cli-build
+  script:
+    - composer run-script security
+  dependencies:
+    - composer
+  only:
+    - tags
+    - web
+    - merge_requests
