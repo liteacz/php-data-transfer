@@ -41,7 +41,7 @@ class User extends DataObject
      * @dto-property LastName
      * And last name is PascalCased? What?
      * It's weird API we're dealing with, indeed.
-     * Fortunately we can easily rename it for our purposes.d
+     * Fortunately we can easily rename it for our purposes.
      */
     public $lastName;
 }
