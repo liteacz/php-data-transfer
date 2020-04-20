@@ -20,7 +20,7 @@ class DataProperty
      */
     protected $key;
 
-    public function __construct(ReflectionProperty $reflection, string $key = null)
+    public function __construct(ReflectionProperty $reflection, string $key)
     {
         $this->reflection = $reflection;
         $this->key = $key;
@@ -43,7 +43,7 @@ class DataProperty
         $docComment = $this->reflection->getDocComment();
 
         return new DataPropertyType(
-            $type === false ? null : $type,
+            empty($type) ? null : $type,
             $docComment === false ? null : $docComment
         );
     }
@@ -57,7 +57,7 @@ class DataProperty
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      * @return mixed
      */
     public function parseValue($value)
@@ -66,7 +66,7 @@ class DataProperty
     }
 
     /**
-     * @param $object
+     * @param mixed $object
      * @return bool
      */
     public function isInitialized($object): bool

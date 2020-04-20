@@ -58,7 +58,15 @@ abstract class DataObject
     protected static $propertyFilter = ReflectionProperty::IS_PUBLIC;
 
     /**
-     * @param array $data
+     * DataObject constructor.
+     */
+    final public function __construct()
+    {
+        //
+    }
+
+    /**
+     * @param mixed[] $data
      * @return static
      * @throws ReflectionException
      * @throws MissingExpectedPropertyException

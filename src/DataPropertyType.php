@@ -36,11 +36,16 @@ class DataPropertyType
     public function isNullable(): bool
     {
         $types = $this->getTypes();
-        return $this->type->allowsNull() || in_array('null', $types);
+
+        $allowsNull = $this->type === null
+            ? false
+            : $this->type->allowsNull();
+
+        return $allowsNull || in_array('null', $types);
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      * @return mixed
      */
     public function parseValue($value)
@@ -62,7 +67,7 @@ class DataPropertyType
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      * @param string $type
      * @return mixed
      * @throws Exception
@@ -87,23 +92,30 @@ class DataPropertyType
         }
 
         if (strtolower($type) === 'array' || substr($type, -2) === '[]') {
-            if (!is_iterable($value)) {
-                throw new Exception('Can not convert non-iterable value to array');
+            if (!is_array($value)) {
+                throw new Exception('Can not convert non-array value to array');
             }
 
             $arrayType = substr($type, 0, -2);
 
             if (class_exists($arrayType) && is_subclass_of($arrayType, DataObject::class)) {
                 return array_map(function ($item) use ($arrayType) {
-                    return call_user_func($arrayType . '::create', [$item]);
+                    $callback = [$arrayType, 'create'];
+
+                    if (is_callable($callback)) {
+                        return call_user_func($callback, [$item]);
+                    }
+
+                    throw new Exception('Method not found');
                 }, $value);
             }
 
             return $value;
         }
 
-        if (class_exists($type) && is_subclass_of($type, DataObject::class)) {
-            return call_user_func($type . '::create', [$value]);
+        $callback = [$type, 'create'];
+        if (class_exists($type) && is_subclass_of($type, DataObject::class) && is_callable($callback)) {
+            return call_user_func($callback, [$value]);
         }
 
         throw new Exception('No suitable type conversion found');

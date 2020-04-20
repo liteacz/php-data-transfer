@@ -31,7 +31,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests",
-        "phpstan": "php -d memory_limit=4G vendor/bin/phpstan --level=8 analyse src",
+        "phpstan": "php -d memory_limit=4G vendor/bin/phpstan analyse",
         "phpcs": "phpcs --standard=PSR1,PSR12 src",
         "phpcbf": "phpcbf --standard=PSR1,PSR12 src",
         "security": "security-checker  security:check ./composer.lock"
