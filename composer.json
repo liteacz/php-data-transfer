@@ -34,6 +34,6 @@
         "phpstan": "php -d memory_limit=4G vendor/bin/phpstan --level=8 analyse src",
         "phpcs": "phpcs --standard=PSR1,PSR12 src",
         "phpcbf": "phpcbf --standard=PSR1,PSR12 src",
-        "security-check": "security-checker  security:check ./composer.lock"
+        "security": "security-checker  security:check ./composer.lock"
     }
 }

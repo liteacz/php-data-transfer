@@ -102,8 +102,8 @@ test: up cmd.sh
 # |-------------------------------------------------------------
 # |
 # | Runs sensyolabs php security-checker
-security-check:
-	docker-compose exec -u $(UID) php-cli composer run-script security-check
+security:
+	docker-compose exec -u $(UID) php-cli composer run-script security
 
 # |-------------------------------------------------------------
 # | All static analysis
