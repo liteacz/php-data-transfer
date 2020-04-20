@@ -111,5 +111,5 @@ security:
 # |
 # | Runs all the static analysis. This get's done in the repository CI.
 # | Verify that all passes before submitting PR, otherwise it will get rejected.
-stan: phpstan phpcs security-check
+stan: phpstan phpcs security
 	@echo "All static analysis done"
