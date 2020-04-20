@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Litea\DataTransfer;
 
-use \Exception;
-use \ReflectionType;
+use Exception;
+use ReflectionType;
 
 class DataPropertyType
 {
@@ -48,7 +50,8 @@ class DataPropertyType
         foreach ($types as $type) {
             try {
                 return $this->convertToType($value, $type);
-            } catch (\Exception $exception) {}
+            } catch (\Exception $exception) {
+            }
         }
 
         if ($this->type !== null && $this->type->isBuiltin()) {
