@@ -52,7 +52,7 @@ $user = User::create($response);
 // There we go!
 // Now, we've got an auto-completion and everything.
 echo $user->firstName;
-echo $user->lasName;
+echo $user->lastName;
 ```
 
 ## Documentation
