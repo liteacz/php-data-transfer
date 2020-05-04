@@ -103,7 +103,7 @@ class DataPropertyType
                     $callback = [$arrayType, 'create'];
 
                     if (is_callable($callback)) {
-                        return call_user_func($callback, [$item]);
+                        return call_user_func($callback, $item);
                     }
 
                     throw new Exception('Method not found');

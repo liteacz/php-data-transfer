@@ -1,4 +1,8 @@
-# PHP Data Transfer Library
+# 🔀 PHP Data Transfer Library
+
+No need to read the details regarding the motivation behind the DTO?
+
+🚀 [Jump right to action!](#with-dto)
 
 We tried to solve this conundrum:
 
@@ -6,7 +10,7 @@ We tried to solve this conundrum:
 <?php
 $user = $client->getUser();
 
-// How do you access user's name?
+// How do we access user's name?
 // Like this?
 echo $user['name'];
 
@@ -25,6 +29,7 @@ And now, with the Data Transfer Library:
 
 ```php
 <?php
+
 use \Litea\DataTransfer\DataObject;
 
 class User extends DataObject
@@ -55,15 +60,15 @@ echo $user->firstName;
 echo $user->lastName;
 ```
 
-## Documentation
+## 📖 Documentation
 
 Bellow you will find the basic usage of this library. For more details see the
 documentation located in the [docs](./docs/README.md) directory of this repository.
 
 ## Table of contents
-- [About](#about)
-- [Installation](#installation)
-- [Basic usage](#basic-usage)
+- [ℹ️ About](#about)
+- [🔌 Installation](#installation)
+- [🏁 Basic usage](#basic-usage)
 
 ## About
 
@@ -75,11 +80,13 @@ object wrapper with static and hopefully typed properties through which you can
 access the underlying values.
 
 These objects get repetitive very quickly and after second or third DTO you reach
-for good old CTRL+C, CTRL+V which can be very error prone.
+for good old CTRL+C, CTRL+V which can be very error prone and hard to maintain.
 
 This is a real-life example of DTO object that helps you to give you better control over the incoming data:
 
 ```php
+<?php
+
 class InitCallResponse
 {
     public const REDIRECT_URL = 'redirectURL';
@@ -142,8 +149,83 @@ and provide them in the form of this package.
 
 ## Installation
 
-TODO
+The easiest way to install this library is using [composer](https://getcomposer.org):
+
+```bash
+composer require liteacz/dto
+```
 
 ## Basic usage
 
-TODO
+### Without DTO
+
+```php
+<?php
+
+// Include composer's auto-loading features
+require_once __DIR__ . '/vendor/autoload.php';
+
+$client = new \GuzzleHttp\Client();
+$response = $client->request('GET', 'https://jsonplaceholder.typicode.com/posts/1');
+$post = json_decode((string)$response->getBody(), true);
+
+// Now we access the data:
+$postId = $post['id'];
+$authorId = $post['authorId'];
+$title = $post['tilte'];
+
+// And the result:
+// Notice: Undefined index: authorId in index.php on line 18
+// Notice: Undefined index: tilte in index.php on line 19
+// What?!
+// We need to refer to the API documentation or run the code and
+// debug it to find out what does the response body actually look like.
+//
+// As you can see, this is very error prone. First we find out, that 
+// the field for accessing author's id is actually named `userId`.
+// Then we might discover the typo we made and correct `tilte` to `title`.
+```
+
+Now imagine you use this service multiple times across your application.
+You need to pay extra attention to not to make mistakes or typos regarding the
+field namings. Your IDE can't help you here.
+
+### With DTO
+
+First of all we need an object, that will represent the data:
+```php
+<?php
+namespace MyApp\DTO;
+
+class Post extends \Litea\DataTransfer\DataObject
+{
+    public string $id;
+    public int $userId;
+}
+```
+
+Then we fetch the data as usual:
+
+```php
+<?php
+
+// ...
+// first lines are the same
+// then we get the post:
+$postRaw = json_decode((string)$response->getBody(), true);
+
+// Now we wrap it up with the DTO magic:
+$post = MyApp\DTO\Post::create($postRaw);
+
+// Now we know the structure we are dealing with:
+$postId = $post->id;
+$authorId = $post->userId; 
+
+// And then, they lived happily ever after...
+// The end
+```
+
+That's it. As you can see, in the simplest form using the DTO object is the
+matter of defining one class that extends `Litea\DataTransfer\DataObject` and then calling `MyObject::create`.
+
+To learn more about available configuration options see the [documentation](./docs/README.md) or the working [examples](./examples/README.md).
