@@ -152,7 +152,7 @@ and provide them in the form of this package.
 The easiest way to install this library is using [composer](https://getcomposer.org):
 
 ```bash
-composer require liteacz/dto
+composer require litea/dto
 ```
 
 ## Basic usage
