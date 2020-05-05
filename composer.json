@@ -1,5 +1,5 @@
 {
-    "name": "liteacz/dto",
+    "name": "litea/dto",
     "description": "Data transfer library that helps you to deal with unknown data",
     "type": "library",
     "require-dev": {
